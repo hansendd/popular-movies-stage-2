@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="start_data_top">5dp</dimen>
+    <dimen name="data_left_margin">5dp</dimen>
+    <dimen name="data_layout_margin_top">5dp</dimen>
+</resources>
