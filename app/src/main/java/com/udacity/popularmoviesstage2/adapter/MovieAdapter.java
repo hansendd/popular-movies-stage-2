@@ -1,4 +1,4 @@
-package com.udacity.popularmoviesstage1.adapter;
+package com.udacity.popularmoviesstage2.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,13 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.udacity.popularmoviesstage1.R;
-import com.udacity.popularmoviesstage1.model.Movie;
+import com.udacity.popularmoviesstage2.R;
+import com.udacity.popularmoviesstage2.model.Movie;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,12 +36,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         this.movieList = movieList;
     }
 
-//    public void setMovieList(List<Movie> movieList) {
-//        this.movieList.clear();
-//        this.movieList.addAll(movieList);
-//        this.notifyDataSetChanged();
-//    }
-
     @Override
     public MovieAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup,
                                                      int viewType) {
@@ -59,11 +51,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
                                  int position) {
         Movie movie = movieList.get(position);
 
-//        movieAdapterViewHolder.test.setText(movie.getPosterPath());
         Picasso
-        .with(context)
-        .load(movie.buildPosterPath())
-        .into(movieAdapterViewHolder.moviePoster);
+            .with(context)
+            .load(movie.buildPosterPath())
+            .into(movieAdapterViewHolder.moviePoster);
     }
 
     @Override
@@ -74,12 +65,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     public class MovieAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final ImageView moviePoster;
-//        final TextView test;
 
         public MovieAdapterViewHolder(View view) {
             super(view);
 
-//            test = (TextView) view.findViewById(R.id.test);
             moviePoster = (ImageView) view.findViewById(R.id.imageview_movie_poster);
 
             view.setOnClickListener(this);

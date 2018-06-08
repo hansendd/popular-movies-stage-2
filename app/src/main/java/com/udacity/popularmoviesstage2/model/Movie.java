@@ -1,16 +1,12 @@
-package com.udacity.popularmoviesstage1.model;
+package com.udacity.popularmoviesstage2.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Created by hansend on 5/18/2018.
@@ -20,13 +16,14 @@ import java.time.format.DateTimeFormatter;
  */
 
 public class Movie implements Parcelable {
-    final public static String _API_KEY = "<<API_KEY>>";
+    final public static String _API_KEY = "2a36fb8563a19bef9042d9c8c57c2863";
     private String posterPath;
     private String title;
     private String releaseDate;
     private BigDecimal voteAverage;
     private String overview;
     private BigDecimal page;
+    private String id;
 
     public Movie(JSONObject jsonObjectMovie) throws JSONException {
 //        Log.d("Movie", jsonObjectMovie.toString());
@@ -40,6 +37,8 @@ public class Movie implements Parcelable {
                                                    "vote_average");
         overview = getJSONObjectValueString(jsonObjectMovie,
                                             "overview");
+        id = getJSONObjectValueString(jsonObjectMovie,
+                                      "id");
 //        page = getJSONObjectValueBigDecimal(jsonObjectMovie,
 //                                            "page");
     }
@@ -79,6 +78,8 @@ public class Movie implements Parcelable {
         return page;
     }
 
+    public String getId() { return id; }
+
     public String buildPosterPath() {
         final String _URL_TEMPLATE = "%s/%s/%s";
         final String _BASE_URL = "http://image.tmdb.org/t/p";
@@ -96,6 +97,7 @@ public class Movie implements Parcelable {
         releaseDate = in.readString();
         voteAverage = new BigDecimal(in.readDouble());
         overview = in.readString();
+        id = in.readString();
 //        page = new BigDecimal(in.readInt());
     }
 
@@ -107,6 +109,7 @@ public class Movie implements Parcelable {
         dest.writeString(releaseDate);
         dest.writeDouble(voteAverage.doubleValue());
         dest.writeString(overview);
+        dest.writeString(id);
 //        dest.writeInt(page.toBigInteger().intValue());
     }
 

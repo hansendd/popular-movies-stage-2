@@ -1,4 +1,4 @@
-package com.udacity.popularmoviesstage1;
+package com.udacity.popularmoviesstage2;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

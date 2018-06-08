@@ -1,4 +1,4 @@
-package com.udacity.popularmoviesstage1.activity;
+package com.udacity.popularmoviesstage2.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,14 +10,14 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.udacity.popularmoviesstage1.R;
-import com.udacity.popularmoviesstage1.adapter.MovieAdapter;
-import com.udacity.popularmoviesstage1.model.Movie;
+import com.udacity.popularmoviesstage2.R;
+import com.udacity.popularmoviesstage2.adapter.MovieAdapter;
+import com.udacity.popularmoviesstage2.model.Movie;
+import com.udacity.popularmoviesstage2.utility.NetworkConnectionUtility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,26 +69,14 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void loadMovies(int moviesId) {
-        if(haveActiveNetworkConnection()) {
+        ConnectivityManager connectivityManager =
+            (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(NetworkConnectionUtility.haveActiveNetworkConnection(connectivityManager)) {
             new MoviesRetrieval().execute(moviesId, 1);
         }
         else {
-            Toast.makeText(this, R.string.no_network_connection, Toast.LENGTH_SHORT).show();
+            NetworkConnectionUtility.displayNoNetworkConnection(this);
         }
-    }
-
-    private boolean haveActiveNetworkConnection() {
-        ConnectivityManager connectivityManager = getConnectivityManager();
-        NetworkInfo activeNetworkInfo = getActiveNetworkInfo(connectivityManager);
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    private ConnectivityManager getConnectivityManager() {
-        return (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-    }
-
-    private NetworkInfo getActiveNetworkInfo(ConnectivityManager connectivityManager) {
-        return connectivityManager.getActiveNetworkInfo();
     }
 
     private void setMovieList(List<Movie> movieList) {

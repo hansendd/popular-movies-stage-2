@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Popular Movies Stage 1</string>
+    <string name="app_name">Popular Movies Stage 2</string>
 
     <!-- Settings Menu -->
     <string name="top_rated">Top Rated</string>
@@ -10,8 +10,10 @@
     <string name="release_date">Release Date</string>
     <string name="plot">Plot</string>
     <string name="vote_average">Vote Average</string>
+    <string name="trailers">Trailers</string>
 
 
     <!-- Error messages -->
     <string name="no_network_connection">No network found, unable to retrieve movies</string>
+    <string name="unrecognized_video_format">Unable to play video, unrecognized format.</string>
 </resources>

@@ -99,5 +99,24 @@
                 style="@style/font_white"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/linear_layout_trailer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_below="@+id/linear_layout_vote_average"
+            android:layout_marginTop="@dimen/data_layout_margin_top">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/trailers"
+                style="@style/font_bold_white"/>
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/recyclerview_movie_detail_video">
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>l
+
     </RelativeLayout>
 </ScrollView>
