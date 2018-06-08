@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  */
 
 public class Movie implements Parcelable {
-    final public static String _API_KEY = "2a36fb8563a19bef9042d9c8c57c2863";
+    final public static String _API_KEY = "<<API_KEY>>";
     private String posterPath;
     private String title;
     private String releaseDate;
