@@ -2,6 +2,7 @@ package com.udacity.popularmoviesstage2.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.udacity.popularmoviesstage2.R;
 import com.udacity.popularmoviesstage2.adapter.MovieAdapter;
+import com.udacity.popularmoviesstage2.data.MovieContract;
 import com.udacity.popularmoviesstage2.model.Movie;
 import com.udacity.popularmoviesstage2.utility.NetworkConnectionUtility;
 
@@ -65,14 +67,30 @@ public class MainActivity extends AppCompatActivity implements
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_movie_search));
 
-        loadMovies(Movies.TOP_RATED.id);
+        if (savedInstanceState != null) {
+            movieAdapter.loadMovieListState(savedInstanceState);
+        }
+        else {
+            loadMovies(Movies.TOP_RATED.id);
+        }
+    }
+
+
+    // Reference: https://developer.android.com/guide/components/activities/activity-lifecycle#java
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        movieAdapter.saveMovieListState(outState);
+
+        super.onSaveInstanceState(outState);
+
     }
 
     private void loadMovies(int moviesId) {
         ConnectivityManager connectivityManager =
             (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if(NetworkConnectionUtility.haveActiveNetworkConnection(connectivityManager)) {
-            new MoviesRetrieval().execute(moviesId, 1);
+            new MoviesRetrieval().execute(moviesId);
         }
         else {
             NetworkConnectionUtility.displayNoNetworkConnection(this);
@@ -136,25 +154,35 @@ public class MainActivity extends AppCompatActivity implements
         private final String _API_KEY = Movie._API_KEY;
         private final String _TOP_RATED = "top_rated";
         private final String _POPULAR = "popular";
-        private final String _URL_TEMPLATE = "https://api.themoviedb.org/3/movie/%s?page=%s&language=en-US&api_key=%s";
+        private final String _URL_TEMPLATE_IMDB = "https://api.themoviedb.org/3/movie/%s?page=%s&language=en-US&api_key=%s";
+        private final String _URL_TEMPLATE_FAVORITES = "https://api.themoviedb.org/3/movie/%s?&language=en-US&api_key=%s";
 
         public List<Movie> doInBackground(Object ... params) {
+            List<Movie> movieList = new ArrayList<Movie>();
             try {
                 int moviesId = (int) params[0];
-                int page = (int) params[1];
 
+                if (moviesId == Movies.TOP_RATED.id ||
+                    moviesId == Movies.POPULAR.id) {
+                    Integer page = 1;
 
-                String moviesUrl = getMoviesUrl(moviesId);
-                String urlString = buildUrlString(moviesUrl,
-                                                  page);
-                URL url = buildUrl(urlString);
-                return getMovies(url);
+                    String moviesUrl = getMoviesUrl(moviesId,
+                                                    page);
+                    URL url = buildUrl(moviesUrl);
+                    String json = getMovies(url);
+                    movieList = createMovieList(json);
+                }
+                else if (moviesId == Movies.FAVORITES.id) {
+                    Cursor movieDataCursor = getMoviesFavorites();
+                    movieList = getMovies(movieDataCursor);
+                }
             }
             catch (Exception e) {
                 // Better error handling here?
                 System.out.println(e);
                 return null;
             }
+            return movieList;
         }
 
         @Override
@@ -162,18 +190,15 @@ public class MainActivity extends AppCompatActivity implements
             setMovieList((ArrayList<Movie>) result);
         }
 
-        private String getMoviesUrl(int moviesId) {
+        private String getMoviesUrl(int moviesId,
+                                    Integer page) {
             String moviesUrl = _TOP_RATED;
             if (moviesId == Movies.POPULAR.id) {
                 moviesUrl = _POPULAR;
             }
-            return moviesUrl;
-        }
 
-        private String buildUrlString(String movesUrl,
-                                      int page) {
-            return String.format(_URL_TEMPLATE,
-                                 movesUrl,
+            return String.format(_URL_TEMPLATE_IMDB,
+                                 moviesUrl,
                                  page,
                                  _API_KEY);
         }
@@ -182,12 +207,11 @@ public class MainActivity extends AppCompatActivity implements
             return new URL(urlString);
         }
 
-        private List<Movie> getMovies(URL url) throws IOException, JSONException {
+        private String getMovies(URL url) throws IOException, JSONException {
             HttpURLConnection httpURLConnection = getHttpUrlConnection(url);
             try {
                 httpURLConnection.connect();
-                String json = getResponseJson(httpURLConnection.getInputStream());
-                return createMovieList(json);
+                return getResponseJson(httpURLConnection.getInputStream());
             }
             finally {
                 httpURLConnection.disconnect();
@@ -238,11 +262,50 @@ public class MainActivity extends AppCompatActivity implements
             }
             return movieList;
         }
+
+        private Cursor getMoviesFavorites() {
+            return getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+                                    null,
+                                     null,
+                                  null,
+                                              MovieContract.MovieEntry.COLUMN_MOVIE_ID);
+        }
+
+        private List<Movie> getMovies(Cursor movieDataCursor) throws IOException, JSONException {
+            // Resource for iterating through a cursor:
+            // http://www.informit.com/articles/article.aspx?p=2731932&seqNum=4
+            List<Movie> movieList = new ArrayList<Movie>();
+            try {
+                while(movieDataCursor.moveToNext()) {
+                    int columnIndex
+                            = movieDataCursor
+                                .getColumnIndexOrThrow(MovieContract.MovieEntry.COLUMN_MOVIE_ID);
+
+                    String movieId = movieDataCursor.getString(columnIndex);
+                    String moviesUrl = getMoviesUrl(movieId);
+                    URL url = buildUrl(moviesUrl);
+                    String json = getMovies(url);
+                    JSONObject jsonObject = new JSONObject(json);
+                    movieList.add(new Movie(jsonObject));
+                }
+            }
+            finally {
+                movieDataCursor.close();
+            }
+            return movieList;
+        }
+
+        private String getMoviesUrl(String movieId) {
+            return String.format(_URL_TEMPLATE_FAVORITES,
+                                 movieId,
+                                 _API_KEY);
+        }
     }
 
     private enum Movies {
         TOP_RATED(R.id.menu_item_top_rated),
-        POPULAR(R.id.menu_item_popular);
+        POPULAR(R.id.menu_item_popular),
+        FAVORITES(R.id.menu_item_favorite);
 
         private int id;
         Movies(int id) {

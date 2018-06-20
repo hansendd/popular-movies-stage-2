@@ -2,18 +2,28 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    android:fillViewport="true">
     // Reference https://developer.android.com/guide/topics/ui/layout/relative
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <ImageButton
+            android:background="@android:color/transparent"
+            android:id="@+id/imagebutton_favorite_movie_button"
+            android:layout_alignParentTop="true"
+            android:layout_height="@dimen/button_favorite_size"
+            android:layout_width="@dimen/button_favorite_size"
+            android:src="@drawable/favorite_button_selector"
+            android:layout_alignParentRight="true" />
+
         <ImageView
             android:id="@+id/imageview_movie_poster_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_below="@+id/imagebutton_favorite_movie_button"
             android:layout_marginTop="@dimen/start_data_top"/>
 
         <LinearLayout
@@ -116,7 +126,26 @@
                 android:layout_height="match_parent"
                 android:id="@+id/recyclerview_movie_detail_video">
             </android.support.v7.widget.RecyclerView>
-        </LinearLayout>l
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_layout_review"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_below="@+id/linear_layout_trailer"
+            android:layout_marginTop="@dimen/data_layout_margin_top">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reviews"
+                style="@style/font_bold_white"/>
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/recyclerview_movie_detail_review">
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
 
     </RelativeLayout>
 </ScrollView>

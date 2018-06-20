@@ -1,6 +1,7 @@
 package com.udacity.popularmoviesstage2.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import com.udacity.popularmoviesstage2.R;
 import com.udacity.popularmoviesstage2.model.Movie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -79,6 +81,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
             int adapterPosition = getAdapterPosition();
             Movie movie = movieList.get(adapterPosition);
             movieAdapterOnClickHandler.onClick(movie);
+        }
+    }
+
+    public void saveMovieListState(Bundle outState) {
+        outState.putParcelableArrayList("MOVIE_LIST", new ArrayList<Movie>(movieList));
+    }
+
+    public void loadMovieListState(Bundle saveInstanceState) {
+        if (saveInstanceState.containsKey("MOVIE_LIST")) {
+            ArrayList<Movie> savedMovieList = saveInstanceState.getParcelableArrayList("MOVIE_LIST");
+            movieList.clear();
+            movieList.addAll(savedMovieList);
+            notifyDataSetChanged();
         }
     }
 }

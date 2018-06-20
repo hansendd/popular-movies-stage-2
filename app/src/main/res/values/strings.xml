@@ -4,6 +4,7 @@
     <!-- Settings Menu -->
     <string name="top_rated">Top Rated</string>
     <string name="popular">Popular</string>
+    <string name="favorites">Favorites</string>
 
     <!-- Movie Detail -->
     <string name="title">Title</string>
@@ -11,6 +12,7 @@
     <string name="plot">Plot</string>
     <string name="vote_average">Vote Average</string>
     <string name="trailers">Trailers</string>
+    <string name="reviews">Reviews</string>
 
 
     <!-- Error messages -->

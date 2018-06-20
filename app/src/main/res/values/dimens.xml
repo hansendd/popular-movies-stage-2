@@ -3,4 +3,5 @@
     <dimen name="start_data_top">5dp</dimen>
     <dimen name="data_left_margin">5dp</dimen>
     <dimen name="data_layout_margin_top">5dp</dimen>
+    <dimen name="button_favorite_size">60dp</dimen>
 </resources>
