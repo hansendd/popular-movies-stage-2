@@ -184,7 +184,7 @@ public class DetailActivity extends AppCompatActivity implements
         this.reviewList.addAll(reviewList);
         reviewAdapter = new ReviewAdapter(this,
                                          this.reviewList);
-        recyclerViewVideo.setAdapter(videoAdapter);
+        recyclerViewReview.setAdapter(reviewAdapter);
     }
 
     private TextView findViewByIdTextView(int id) {
@@ -302,6 +302,7 @@ public class DetailActivity extends AppCompatActivity implements
                 String urlString = buildUrlString(movieId);
                 URL url = buildUrl(urlString);
                 reviewList = getReviews(url);
+                System.out.println("Review List Size: " + reviewList.size());
             }
             catch (Exception e) {
                 System.out.println(e);
