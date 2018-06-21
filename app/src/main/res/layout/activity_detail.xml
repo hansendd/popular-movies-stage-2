@@ -2,8 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:fillViewport="true">
+    android:background="@color/colorPrimary">
     // Reference https://developer.android.com/guide/topics/ui/layout/relative
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -23,8 +22,9 @@
             android:id="@+id/imageview_movie_poster_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imagebutton_favorite_movie_button"
-            android:layout_marginTop="@dimen/start_data_top"/>
+            android:layout_marginTop="@dimen/start_data_top"
+            android:layout_below="@+id/imagebutton_favorite_movie_button"/>
+            <!---->/>
 
         <LinearLayout
             android:id="@+id/linear_layout_title"
@@ -46,6 +46,14 @@
                 android:layout_marginLeft="@dimen/data_left_margin"
                 style="@style/font_white"/>
         </LinearLayout>
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:text="@string/release_date"-->
+            <!--android:layout_below="@+id/linear_layout_title"-->
+            <!--style="@style/font_bold_white"-->
+            <!--android:layout_marginTop="@dimen/data_layout_margin_top"/>-->
 
         <LinearLayout
             android:id="@+id/linear_layout_release_date"
