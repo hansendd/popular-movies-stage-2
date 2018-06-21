@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements
     private RecyclerView recyclerViewMovie;
     private MovieAdapter movieAdapter;
     private List<Movie> movieList = new ArrayList<Movie>();
+    private int selectedMovieSort = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +54,10 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_movie);
         recyclerViewMovie = findViewById(R.id.recyclerview_movie);
 
-        LinearLayoutManager linearLayoutManager =
-                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        GridLayoutManager gridLayoutManager =
+                new GridLayoutManager(this, 3);
 
-        recyclerViewMovie.setLayoutManager(linearLayoutManager);
+        recyclerViewMovie.setLayoutManager(gridLayoutManager);
 
         recyclerViewMovie.setHasFixedSize(true);
 
@@ -68,13 +70,13 @@ public class MainActivity extends AppCompatActivity implements
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar_movie_search));
 
         if (savedInstanceState != null) {
-            movieAdapter.loadMovieListState(savedInstanceState);
+            reloadMovies(savedInstanceState);
         }
         else {
+            selectedMovieSort = Movies.TOP_RATED.id;
             loadMovies(Movies.TOP_RATED.id);
         }
     }
-
 
     // Reference: https://developer.android.com/guide/components/activities/activity-lifecycle#java
     @Override
@@ -83,6 +85,32 @@ public class MainActivity extends AppCompatActivity implements
         movieAdapter.saveMovieListState(outState);
 
         super.onSaveInstanceState(outState);
+
+    }
+
+    @Override
+    public void onResume() {
+        System.out.println("On REsume called");
+        if (selectedMovieSort == Movies.FAVORITES.id) {
+            loadMovies(Movies.FAVORITES.id);
+        }
+        super.onResume();
+    }
+
+    private void reloadMovies(Bundle savedInstanceState) {
+        if (selectedMovieSort != Movies.FAVORITES.id) {
+            movieAdapter.loadMovieListState(savedInstanceState);
+        }
+        else {
+            loadMovies(Movies.FAVORITES.id);
+        }
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            movieAdapter.loadMovieListState(savedInstanceState);
+        }
 
     }
 
@@ -115,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         clearMovieList();
+        selectedMovieSort = menuItem.getItemId();
         loadMovies(menuItem.getItemId());
         return true;
     }

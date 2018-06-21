@@ -89,6 +89,14 @@ public class MovieContentProvider extends ContentProvider {
                                                   null,
                                                   null,
                                                   sortOrder);
+            case MOVIES_WITH_ID:
+                retCursor =  sqLiteDatabase.query(TABLE_NAME,
+                                                  projection,
+                                                  selection,
+                                                  selectionArgs,
+                                         null,
+                                          null,
+                                                  sortOrder);
                 break;
             // Default exception
             default:

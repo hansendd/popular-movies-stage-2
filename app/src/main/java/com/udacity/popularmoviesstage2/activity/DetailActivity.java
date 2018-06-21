@@ -8,10 +8,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -293,17 +295,18 @@ public class DetailActivity extends AppCompatActivity implements
         private final String _URL_TEMPLATE = "https://api.themoviedb.org/3/movie/%s/reviews?language=en-US&api_key=%s&page=1";
 
         public List<Review> doInBackground(Object ... params) {
+            List<Review> reviewList = new ArrayList<Review>();
             try {
                 String movieId = (String) params[0];
 
                 String urlString = buildUrlString(movieId);
                 URL url = buildUrl(urlString);
-                return getReviews(url);
+                reviewList = getReviews(url);
             }
             catch (Exception e) {
                 System.out.println(e);
-                return null;
             }
+            return reviewList;
         }
 
         @Override

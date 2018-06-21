@@ -3,6 +3,8 @@ package com.udacity.popularmoviesstage2.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.udacity.popularmoviesstage2.BuildConfig;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,7 +18,7 @@ import java.math.BigDecimal;
  */
 
 public class Movie implements Parcelable {
-    final public static String _API_KEY = "<<API_KEY>>";
+    final public static String _API_KEY = BuildConfig.API_KEY;
     private String posterPath;
     private String title;
     private String releaseDate;
