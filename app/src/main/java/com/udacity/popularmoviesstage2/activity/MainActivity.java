@@ -81,16 +81,18 @@ public class MainActivity extends AppCompatActivity implements
     // Reference: https://developer.android.com/guide/components/activities/activity-lifecycle#java
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        GridLayoutManager gridLayoutManager = (GridLayoutManager) recyclerViewMovie.getLayoutManager();
+        int scrollLocation = gridLayoutManager.findFirstVisibleItemPosition();
 
         movieAdapter.saveMovieListState(outState);
-
-        super.onSaveInstanceState(outState);
+        outState.putInt("SCROLL_LOCATION", scrollLocation);
 
     }
 
     @Override
     public void onResume() {
-        System.out.println("On REsume called");
         if (selectedMovieSort == Movies.FAVORITES.id) {
             loadMovies(Movies.FAVORITES.id);
         }
@@ -104,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements
         else {
             loadMovies(Movies.FAVORITES.id);
         }
+        int scrollLocation = savedInstanceState.getInt("SCROLL_LOCATION");
+        recyclerViewMovie.scrollToPosition(scrollLocation);
     }
 
     @Override
